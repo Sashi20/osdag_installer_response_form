@@ -1,0 +1,6 @@
+name = Installer response form
+description = Feedback response form for OSDAG Installers.
+package = Webform
+version = "7.1"
+core = "7.x"
+
