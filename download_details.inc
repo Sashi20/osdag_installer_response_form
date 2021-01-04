@@ -1,5 +1,4 @@
 <?php
-// DWSIM Flowsheet display completed proposals
 function view_responses_all()
 {
 	$output = "";
@@ -16,7 +15,7 @@ function view_responses_all()
 				$row->institute,
 				$row->email_id,
 				$row->designation,
-				$row->insatller_type
+				//$row->insatller_type
 			);
 		} //$row = $result->fetchObject()
 		$preference_header = array(
@@ -25,7 +24,7 @@ function view_responses_all()
 			'Institute',
 			'Email_ID',
 			'Designation',
-			'Insatller Type'
+			//'Insatller Type'
 		);
 		$output .= theme('table', array(
 			'header' => $preference_header,
