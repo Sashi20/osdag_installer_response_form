@@ -19,7 +19,7 @@ function view_responses_all()
 			);
 		} //$row = $result->fetchObject()
 		$preference_header = array(
-			'No',
+			'S. No',
 			'Name',
 			'Institute',
 			'Email_ID',

@@ -68,7 +68,7 @@ function installer_response_form_menu()
   );
 
   $items['view_respones'] = array(
-    'title' => 'Instaler Responses',
+    'title' => 'Installer Responses',
     'page callback' => 'view_responses_all',
     'access arguments' => array(
       'osdag view responses'
