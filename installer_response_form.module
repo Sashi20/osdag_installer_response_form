@@ -66,6 +66,16 @@ function installer_response_form_menu()
     'type' => MENU_NORMAL_ITEM,
     'file' => 'settings.inc'
   );
+
+  $items['view_respones'] = array(
+    'title' => 'Completed Downloads',
+    'page callback' => 'view_responses_all',
+    'access arguments' => array(
+      'osdag download code'
+    ),
+    'file' => 'download_details.inc'
+  );
+
 	return $items;
 }
 
@@ -83,6 +93,10 @@ function installer_response_form_permission(){
              'title' => t('administer installer settings'),
              'restrict access' => TRUE,
              ),
+             'osdag download code' => array(
+              'title' => t('OSDAG download responses'),
+              'restrict access' => TRUE,
+            )
     );
 }
 
