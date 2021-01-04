@@ -24,7 +24,7 @@ function view_responses_all()
 			'Name',
 			'Institute',
 			'Email_ID',
-			'Institute',
+			'Designation',
 			'Insatller Type'
 		);
 		$output .= theme('table', array(
