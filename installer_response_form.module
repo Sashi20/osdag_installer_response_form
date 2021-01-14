@@ -111,12 +111,12 @@ function data_submission_form($form, &$form_state) {
   '#type' => 'item',
   '#attributes' => array('readonly' => 'readonly'),
   '#markup' => t('
-<center><p style="font-size:12px;">Osdag®️ license and its resources are completely free of cost!</p>
+<center><p style="font-size:14px;">Osdag®️ license and its resources are completely free of cost!</p>
 
-<p style="font-size:12px;">Osdag®️ and the Osdag logo are the registered trademarks of the Indian Institute of Technology, Bombay</p></center>
+<p style="font-size:14px;">Osdag®️ and the Osdag logo are the registered trademarks of the Indian Institute of Technology, Bombay</p></center>
 
-<p style="font-size:12px;">Please fill the `Osdag User Information Form’ given below. Your data is completely safe with IIT Bombay and shall be used only for internal quality assessment by the team, sending timely e-mail notification(s) regarding Osdag events/workshops, installer updates/patches,  etc.
-</p><p style="font-size:12px;">
+<p style="font-size:14px;">Please fill the `Osdag User Information Form’ given below. Your data is completely safe with IIT Bombay and shall be used only for internal quality assessment by the team, sending timely e-mail notification(s) regarding Osdag events/workshops, installer updates/patches,  etc.
+</p><p style="font-size:14px;">
 We will not spam you with frequent emails!</p>'),
   
 );
@@ -201,6 +201,15 @@ $form['release_date'] = array(
     '#limit_validation_errors' => array(),
     '#submit' => array('data_submission_form_skip_submit'),*/
   );  
+
+  $form['forum_text'] = array(
+  '#type' => 'item',
+  //'#attributes' => array('readonly' => 'readonly'),
+  '#markup' => t('
+<center><h6>Did you know?</h6></center>
+<p style="font-size:14px;">You can ask queries related to Osdag and take part in discussions by connecting with the Osdag team and other users through the FOSSEE Forums. Click <a href="https://forums.fossee.in/accounts/register/" target="_blank">here</a> to get started.</p>'),
+  
+);
 
  return $form;
 }
