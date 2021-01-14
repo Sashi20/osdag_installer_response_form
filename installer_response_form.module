@@ -35,7 +35,7 @@ function installer_response_form_menu()
     'file' => 'download.inc'
   );
 	$items['download-installer'] = array(
-		'title' => t('Download Installer'),
+		'title' => t('Osdag User Information Form'),
 		'page callback' => 'drupal_get_form',
 		'page arguments' => array(
       'data_submission_form'
@@ -45,7 +45,7 @@ function installer_response_form_menu()
 		),
 	);
   $items['skip/download-installer'] = array(
-    'title' => 'Download Installer',
+    'title' => 'Osdag User Information Form',
     'description' => 'Download Installer',
     'page callback' => 'skip_download_osdag_installer',
     'access arguments' => array(
@@ -113,7 +113,7 @@ function data_submission_form($form, &$form_state) {
   '#markup' => t('
 <center><p style="font-size:14px;">Osdag®️ license and its resources are completely free of cost!</p>
 
-<p style="font-size:14px;">Osdag®️ and the Osdag logo are the registered trademarks of the Indian Institute of Technology, Bombay</p></center>
+<p style="font-size:14px;">Osdag®️ and the Osdag logo are the registered trademarks of the Indian Institute of Technology, Bombay</p></center><br>
 
 <p style="font-size:14px;">Please fill the `Osdag User Information Form’ given below. Your data is completely safe with IIT Bombay and shall be used only for internal quality assessment by the team, sending timely e-mail notification(s) regarding Osdag events/workshops, installer updates/patches,  etc.
 </p><p style="font-size:14px;">
