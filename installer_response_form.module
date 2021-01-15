@@ -1,7 +1,7 @@
 <?php
-error_reporting(E_ALL);
+/*error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
-ini_set('display_startup_errors', TRUE);
+ini_set('display_startup_errors', TRUE);*/
 global $base_url; // Will point to http://www.example.com
 /**
  * Implements hook_menu().
@@ -32,9 +32,10 @@ function installer_response_form_menu()
       'access installer response form'
     ),
     'type' => MENU_CALLBACK,
+    'file' => 'download.inc'
   );
 	$items['download-installer'] = array(
-		'title' => t('Download Installer'),
+		'title' => t('Osdag User Information Form'),
 		'page callback' => 'drupal_get_form',
 		'page arguments' => array(
       'data_submission_form'
@@ -44,14 +45,14 @@ function installer_response_form_menu()
 		),
 	);
   $items['skip/download-installer'] = array(
-    'title' => 'Download Installer',
+    'title' => 'Osdag User Information Form',
     'description' => 'Download Installer',
     'page callback' => 'skip_download_osdag_installer',
     'access arguments' => array(
       'access installer response form'
     ),
     'type' => MENU_CALLBACK,
-    //'file' => 'download.inc'
+    'file' => 'download.inc'
   );
   $items['admin/settings/installers'] = array(
     'title' => 'Installer Settings',
@@ -67,13 +68,13 @@ function installer_response_form_menu()
     'file' => 'settings.inc'
   );
 
-  $items['view_respones'] = array(
+  $items['view-responses'] = array(
     'title' => 'Installer Responses',
     'page callback' => 'view_responses_all',
     'access arguments' => array(
       'osdag view responses'
     ),
-    'file' => 'download_details.inc'
+    'file' => 'view_responses.inc'
   );
 
 	return $items;
@@ -100,41 +101,6 @@ function installer_response_form_permission(){
     );
 }
 
-/*function download_osdag_installer(){
-	$url_id = arg(2);
-  $release_date = arg(1);
-  //var_dump($url_id . ' ' . $release_date);die;
-  $query = db_select('installer_files');
-  $query->fields('installer_files');
-  $query->condition('release_date', $release_date);
-  $query->condition('id', $url_id);
-  $query->range(0, 1);
-  $installer_q = $query->execute();
-  $installer_data = $installer_q->fetchObject();
-  //var_dump($installer_data);die;
-    $page_content = "";	
-      $installer_response_form = drupal_get_form("data_submission_form", $);
-          $page_content .= drupal_render($installer_response_form);
-	global $installer_url;
-	switch ($url_id) {
-		case 'l1':
-			$installer_url = 'https://static.fossee.in/osdag/installation-files/Osdag_ubuntu_installer_v2018.06.a.3839.tar.gz';
-			$installer_response_form = drupal_get_form("data_submission_form", $installer_url);
-        	$page_content .= drupal_render($installer_response_form);
-			break;
-		case 'w1':
-			$installer_url = 'https://static.fossee.in/osdag/installation-files/Osdag_windows_installer_v2018.06.a.3839.zip';
-			$installer_response_form = drupal_get_form("data_submission_form", $installer_url);
-        	$page_content .= drupal_render($installer_response_form);
-			break;
-		
-		default:
-			# code...
-			break;
-	}
-	return $page_content;
-}*/
-
 function data_submission_form($form, &$form_state) {
 	$url_id = arg(2);
   $release_date = arg(1);
@@ -145,13 +111,13 @@ function data_submission_form($form, &$form_state) {
   '#type' => 'item',
   '#attributes' => array('readonly' => 'readonly'),
   '#markup' => t('
-Osdag®️ license and its resources are completely free of cost!
+<center><p style="font-size:14px;">Osdag®️ license and its resources are completely free of cost!</p>
 
-Osdag®️ and the Osdag logo are the registered trademarks of the Indian Institute of Technology, Bombay
+<p style="font-size:14px;">Osdag®️ and the Osdag logo are the registered trademarks of the Indian Institute of Technology, Bombay</p></center><br>
 
-Please fill the Osdag User Information Form’ given below. Your data is completely safe with IIT Bombay and shall be used only for internal quality assessment by the team, sending timely e-mail notification(s) regarding Osdag events/workshops, installer updates/patches,  etc.
-
-We will not spam you with frequent emails!'),
+<p style="font-size:14px;">Please fill the `Osdag User Information Form’ given below. Your data is completely safe with IIT Bombay and shall be used only for internal quality assessment by the team, sending timely e-mail notification(s) regarding Osdag events/workshops, installer updates/patches,  etc.
+</p><p style="font-size:14px;">
+We will not spam you with frequent emails!</p>'),
   
 );
   $form['name_title'] = array(
@@ -236,100 +202,17 @@ $form['release_date'] = array(
     '#submit' => array('data_submission_form_skip_submit'),*/
   );  
 
+  $form['forum_text'] = array(
+  '#type' => 'item',
+  //'#attributes' => array('readonly' => 'readonly'),
+  '#markup' => t('
+<center><h6>Did you know?</h6></center>
+<p style="font-size:14px;">You can ask queries related to Osdag and take part in discussions by connecting with the Osdag team and other users through the FOSSEE Forums. Click <a href="https://forums.fossee.in/accounts/register/" target="_blank">here</a> to get started.</p>'),
+  
+);
+
  return $form;
 }
-
-/*function data_submission_form_validate($form, &$form_state) {
-  //Validation of first name
-  $form_state['values']['first_name'] = trim($form_state['values']['first_name']);
-  if ($form_state['values']['first_name'] != '')
-  {
-    if (strlen($form_state['values']['first_name']) > 32)
-    {
-      form_set_error('first_name', t('Maximum charater limit is 32 charaters only, please check the length of the First Name'));
-    } //strlen($form_state['values']['name']) > 250
-    else if (strlen($form_state['values']['first_name']) < 5)
-    {
-      form_set_error('first_name', t('Minimum charater limit is 5 charaters, please check the length of the Name'));      
-    }
-    else if(preg_match('/[\^£$%&*()}{@#~?><>.:;`|=_+¬]/', $form_state['values']['first_name']))
-      form_set_error('first_name', t('Special characters are not allowed for Name'));
-   //strlen($form_state['values']['name']) < 10
-  } //$form_state['values']['name'] != ''
-  else
-  {
-    form_set_error('first_name', t('Name shoud not be empty'));
-  }
-
-
-//Validation of last name
-  $form_state['values']['last_name'] = trim($form_state['values']['last_name']);
-  if ($form_state['values']['last_name'] != '')
-  {
-    if (strlen($form_state['values']['last_name']) > 32)
-    {
-      form_set_error('last_name', t('Maximum charater limit is 32 charaters only, please check the length of the Last Name'));
-    } //strlen($form_state['values']['name']) > 250
-    else if (strlen($form_state['values']['last_name']) < 2)
-    {
-      form_set_error('last_name', t('Minimum charater limit is 5 charaters, please check the length of the Name'));
-    }
-    else if(preg_match('/[\^£$%&*()}{@#~?><>.:;`|=_+¬]/', $form_state['values']['last_name']))
-      form_set_error('last_name', t('Special characters are not allowed for Name'));
-   //strlen($form_state['values']['name']) < 10
-  } //$form_state['values']['name'] != ''
-  else
-  {
-    form_set_error('last_name', t('Name shoud not be empty'));
-  }
-
-
-//Validation of Organisation name
-  $form_state['values']['org_name'] = trim($form_state['values']['org_name']);
-  if ($form_state['values']['org_name'] != '')
-  {
-    if (strlen($form_state['values']['org_name']) > 32)
-    {
-      form_set_error('org_name', t('Maximum charater limit is 32 charaters only, please check the length of the Name'));
-    } //strlen($form_state['values']['name']) > 250
-    else if (strlen($form_state['values']['org_name']) < 5)
-    {
-      form_set_error('org_name', t('Minimum charater limit is 5 charaters, please check the length of the Name'));
-      
-    }
-    else if(preg_match('/[\^£$%&*()}{@#~?><>.:;`|=_+¬]/', $form_state['values']['org_name']))
-      form_set_error('org_name', t('Special characters are not allowed for Name'));
-   //strlen($form_state['values']['name']) < 10
-  } //$form_state['values']['name'] != ''
-  else
-  {
-    form_set_error('org_name', t('Name shoud not be empty'));
-  }
-
-
-//Validation of Email_ID
-  if(!filter_var($form_state['values']['email_id'], FILTER_VALIDATE_EMAIL)){
-     form_set_error('email_id', t('Invalid Email Address'));
-    }
-
-  //validation of Description
-  $form_state['values']['des'] = trim($form_state['values']['des']);
-  if ($form_state['values']['des'] != '')
-  {
-    if (strlen($form_state['values']['des']) >= 2000)
-    {
-      form_set_error('des', t('Maximum charater limit is 2000 charaters only, please check the length'));
-    } //strlen($form_state['values']['description']) >= 50
-    else if (strlen($form_state['values']['des']) < 1)
-    {
-      form_set_error('des', t('Minimum charater limit is 1 charaters, please check the length'));
-    } //strlen($form_state['values']['description']) < 1
-  } //$form_state['values']['description'] != ''
-  else
-  {
-    form_set_error('des', t('Designation should not be empty'));
-  }
-}*/
 
 function data_submission_form_submit($form, &$form_state, $no_js_use = FALSE){
 
@@ -406,109 +289,6 @@ function data_submission_form_submit($form, &$form_state, $no_js_use = FALSE){
     //  drupal_set_message(t("The form has been submitted.")); 
  
   }
-
- 
-/*function data_submission_form_skip_submit($form, &$form_state) 
-{
-  //var_dump($form_state);die;
-  $v = $form_state["values"];
-  $url_id = $v[0];
-   $release_date = $v[1];
-   var_dump($v);die;
-  $query = db_select('installer_files');
-  $query->fields('installer_files');
-  $query->condition('release_date', $release_date);
-  $query->condition('id', $url_id);
-  $query->range(0, 1);
-  $installer_q = $query->execute();
-  $installer_data = $installer_q->fetchObject();
-      $root_path = installer_directory_path();
-    $filepath = $installer_data->installer_path;
-      header('Content-Type: application/zip');
-      header('Content-disposition: attachment; filename="' . $filepath . '"');
-      header('Content-Length: ' . filesize($root_path . $filepath));
-      header("Content-Transfer-Encoding: Binary");
-      header('Expires: 0');
-      header('Pragma: no-cache');
-      //ob_end_flush();
-      ob_clean();
-      flush();
-      //readfile($filename);
-      if(readfile($root_path . $filepath)){
-        drupal_set_message(t('The form has been submitted.'),'status');
-        drupal_goto('');
-      }
-      else{
-        drupal_set_message(t('Could not download file'), 'error');
-      }
-}*/
-
-function skip_download_osdag_installer()
-{
-  $url_id = arg(3);
-  $release_date = arg(2);
-  $root_path = installer_directory_path();$query = db_select('installer_files');
-  $query->fields('installer_files');
-  $query->condition('release_date', $release_date);
-  $query->condition('id', $url_id);
-  $query->range(0, 1);
-  $installer_q = $query->execute();
-  $installer_data = $installer_q->fetchObject();
-  $filepath = $installer_data->installer_path;
-      header('Content-Type: application/zip');
-      header('Content-disposition: attachment; filename="' . $filepath . '"');
-      header('Content-Length: ' . filesize($root_path . $filepath));
-      header("Content-Transfer-Encoding: Binary");
-      header('Expires: 0');
-      header('Pragma: no-cache');
-      //ob_end_flush();
-      ob_clean();
-      flush();
-      //readfile($filename);
-      if(@readfile($root_path . $filepath)){
-        exit();
-        drupal_goto('');
-        drupal_set_message(t('The form has been submitted.'),'status');
-        
-      }
-      else{
-        drupal_set_message(t('Could not download file'), 'error');
-      }
-}
-
-function download_osdag_instructions_file()
-{
-  $url_id = arg(2);
-  $release_date = arg(1);
-  $root_path = installer_directory_path();$query = db_select('installer_files');
-  $query->fields('installer_files');
-  $query->condition('release_date', $release_date);
-  $query->condition('id', $url_id);
-  $query->range(0, 1);
-  $installer_q = $query->execute();
-  $installer_data = $installer_q->fetchObject();
-  $filepath = $installer_data->instruction_file_path;
-  //var_dump($filepath);die;
-      header('Content-Type: application/txt');
-      header('Content-disposition: attachment; filename="' . $filepath . '"');
-      header('Content-Length: ' . filesize($root_path . $filepath));
-      header("Content-Transfer-Encoding: Binary");
-      header('Expires: 0');
-      header('Pragma: no-cache');
-      //ob_end_flush();
-      ob_clean();
-      flush();
-      //readfile($filename);
-      if(@readfile($root_path . $filepath)){
-        exit();
-        drupal_goto('');
-        //drupal_set_message(t('The form has been submitted.'),'status');
-        
-      }
-      else{
-        drupal_set_message(t('Could not download file'), 'error');
-      }
-}
 
 function installer_directory_path()
 {
