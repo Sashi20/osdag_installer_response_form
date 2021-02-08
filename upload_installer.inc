@@ -42,12 +42,12 @@ function upload_osdag_installer_form($form, &$form_state){
 		'#collapsed' => FALSE,
 	);
 	$form['upload_files']['installer_file'] = array(
-		'#type' => 'file',
-		'#title' => t('Upload the installer file')
+		'#type' => 'textfield',
+		'#title' => t('Enter the filename of the installer file along with the extension')
 	);
 	$form['upload_files']['instructions_file'] = array(
-		'#type' => 'file',
-		'#title' => t('Upload the installer instructions file')
+		'#type' => 'textfield',
+		'#title' => t('Enter the filename the installer instructions file along with the extension')
 	);
 	$form['submit'] = array(
 		'#type' => 'submit',
@@ -59,14 +59,14 @@ function upload_osdag_installer_form($form, &$form_state){
 
 function upload_osdag_installer_form_validate($form, &$form_state)
 {
-	if (isset($_FILES['files']))
+	/*if (isset($_FILES['files']))
 		{
-			/* check for valid filename extensions */
+			/* check for valid filename extensions 
 			foreach ($_FILES['files']['name'] as $file_form_name => $file_name)
 			{
 				if ($file_name)
 				{
-					/* checking file type */
+					/* checking file type 
 					if (strstr($file_form_name, 'installer_file'))
 						$file_type = 'Z';
 					else
@@ -89,31 +89,33 @@ function upload_osdag_installer_form_validate($form, &$form_state)
 					if ($_FILES['files']['size'][$file_form_name] <= 0)
 						form_set_error($file_form_name, t('File size cannot be zero.'));
 				} //$file_name
-			} //$_FILES['files']['name'] as $file_form_name => $file_name
+			} //$_FILES['files']['name'] as $file_form_name => $file_name*/
 		
-} //isset($_FILES['files'])
+//} //isset($_FILES['files'])
 
 }
 
 function upload_osdag_installer_form_submit($form, &$form_state){
 	$v = $form_state["values"];
-	$result = "INSERT INTO {installer_files} (release_date, operating_system, os_version) VALUES(:release_date, :operating_system, :os_version)";
+	$result = "INSERT INTO {installer_files} (release_date, operating_system, os_version, installer_path, instruction_file_path) VALUES(:release_date, :operating_system, :os_version, :installer_path, :instruction_file_path)";
 	$args = array(
 		":release_date" => $v['release_date'],
 		":operating_system" => $v['operating_system'],
-		":os_version" => $v['os_version']
+		":os_version" => $v['os_version'],
+		":installer_path" => $v['installer_file'],
+		":instruction_file_path" => $v['instructions_file']
 		);
 	$installer_id = db_query($result, $args, array(
 		'return' => Database::RETURN_INSERT_ID
 	));
-	$root_path = installer_directory_path();
+	/*$root_path = installer_directory_path();
 	if (!is_dir($root_path))
 		mkdir($root_path);
 	foreach ($_FILES['files']['name'] as $file_form_name => $file_name)
 		{
 			if ($file_name)
 			{
-				/* checking file type */
+				/* checking file type 
 				if (strstr($file_form_name, 'installer_file'))
 						$file_type = 'Z';
 					else
@@ -126,7 +128,7 @@ function upload_osdag_installer_form_submit($form, &$form_state){
 								// drupal_set_message(t("Error uploading file. File !filename already exists.", array('!filename' => $_FILES['files']['name'][$file_form_name])), 'error');
 								unlink($root_path . $_FILES['files']['name'][$file_form_name]);
 							} //file_exists($root_path . $dest_path . $_FILES['files']['name'][$file_form_name])
-							/* uploading file */
+							/* uploading file 
 							if (move_uploaded_file($_FILES['files']['tmp_name'][$file_form_name], $root_path . $_FILES['files']['name'][$file_form_name]))
 							{
 								$query = "UPDATE {installer_files} SET installer_path = :installer_path WHERE id = :id";
@@ -148,7 +150,7 @@ function upload_osdag_installer_form_submit($form, &$form_state){
 								// drupal_set_message(t("Error uploading file. File !filename already exists.", array('!filename' => $_FILES['files']['name'][$file_form_name])), 'error');
 								unlink($root_path . $_FILES['files']['name'][$file_form_name]);
 							} //file_exists($root_path . $dest_path . $_FILES['files']['name'][$file_form_name])
-							/* uploading file */
+							/* uploading file 
 							if (move_uploaded_file($_FILES['files']['tmp_name'][$file_form_name], $root_path . $_FILES['files']['name'][$file_form_name]))
 							{
 								$query = "UPDATE {installer_files} SET instruction_file_path = :instruction_file_path WHERE id = :id";
@@ -166,6 +168,6 @@ function upload_osdag_installer_form_submit($form, &$form_state){
 							break;
 					}
 			} //$file_name
-		} //$_FILES['files']['name'] as $file_form_name => $file_name
+		}*/ //$_FILES['files']['name'] as $file_form_name => $file_name
 	drupal_set_message(t('Installer uploaded succesfully'), 'status');
 }

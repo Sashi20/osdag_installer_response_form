@@ -282,6 +282,7 @@ function data_submission_form_submit($form, &$form_state, $no_js_use = FALSE){
       else{
         drupal_set_message(t('Could not download file'), 'error');
       }
+      $form_state['redirect'] = 'https://osdag.fossee.in';
       //exit;
       //drupal_goto('');
       //drupal_set_message(t('The form has been submitted.'),'status'); 
