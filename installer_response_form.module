@@ -2,6 +2,7 @@
 /*error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);*/
+ini_set('memory_limit', '-1');
 global $base_url; // Will point to http://www.example.com
 /**
  * Implements hook_menu().
@@ -282,6 +283,7 @@ function data_submission_form_submit($form, &$form_state, $no_js_use = FALSE){
       else{
         drupal_set_message(t('Could not download file'), 'error');
       }
+      $form_state['redirect'] = 'https://osdag.fossee.in';
       //exit;
       //drupal_goto('');
       //drupal_set_message(t('The form has been submitted.'),'status'); 
