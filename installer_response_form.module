@@ -187,8 +187,7 @@ $form['release_date'] = array(
   //'#title' => t('Installer URL'),
   '#value' => $release_date
   );
-
-  $form['submit'] = array(
+   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Submit'),
     //'#submit' => array('data_submission_form_submit'),
@@ -202,6 +201,10 @@ $form['release_date'] = array(
     '#limit_validation_errors' => array(),
     '#submit' => array('data_submission_form_skip_submit'),*/
   );  
+ $form['download_note'] = array(
+    '#type' => 'item',
+    '#markup' => t('<span style="color:red">Note:</span> The installer will start downloading after clicking Submit/Skip. Click <a href="https://osdag.fossee.in/resources/downloads">here</a> to go back to the Downloads page.')
+  );
 
   $form['forum_text'] = array(
   '#type' => 'item',
