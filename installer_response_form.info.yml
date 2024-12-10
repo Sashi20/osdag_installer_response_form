@@ -1,0 +1,6 @@
+name: 'Installer response form'
+description: 'Feedback response form for OSDAG Installers.'
+package: Webform
+core_version_requirement: ^9 || ^10
+type: module
+dependencies: {  }

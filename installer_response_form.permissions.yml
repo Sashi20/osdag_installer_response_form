@@ -1,0 +1,12 @@
+'access installer response form':
+  title: 'access installer response form'
+  'restrict access': true
+'upload osdag installer':
+  title: 'Upload osdag installer'
+  'restrict access': true
+'administer installer settings':
+  title: 'administer installer settings'
+  'restrict access': true
+'osdag view responses':
+  title: 'OSDAG view responses'
+  'restrict access': true

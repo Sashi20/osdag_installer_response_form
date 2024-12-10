@@ -1,0 +1,47 @@
+installer_response_form.upload_installer:
+  path: '/upload-installer'
+  defaults:
+    _form: '\Drupal\installer_response_form\Form\InstallerUploadForm'
+    _title: 'Upload your Installer'
+  requirements:
+    _permission: 'upload osdag installer'
+
+installer_response_form.download_instructions:
+  path: '/download-instructions/{release_date}/{url_id}'
+  defaults:
+    _controller: '\Drupal\installer_response_form\Controller\InstallerController::downloadInstructionsFile'
+    _title: 'Download Instructions'
+  requirements:
+    _permission: 'access installer response form'
+
+installer_response_form.download_installer:
+  path: '/download-installer/{release_date}/{url_id}'
+  defaults:
+    _form: '\Drupal\installer_response_form\Form\InstallerForm'
+    _title: 'Osdag User Information Form'
+  requirements:
+    _permission: 'access installer response form'
+
+installer_response_form.skip_download_installer:
+  path: '/skip/download-installer/{release_date}/{url_id}'
+  defaults:
+    _controller: '\Drupal\installer_response_form\Controller\InstallerController::skipDownloadInstaller'
+    _title: 'Osdag User Information Form'
+  requirements:
+    _permission: 'access installer response form'
+
+installer_response_form.installer_settings:
+  path: '/admin/settings/installers'
+  defaults:
+    _form: '\Drupal\installer_response_form\Form\InstallerSettingsForm'
+    _title: 'Installer Settings'
+  requirements:
+    _permission: 'administer installer settings'
+
+installer_response_form.view_responses:
+  path: '/view-responses'
+  defaults:
+    _controller: '\Drupal\installer_response_form\Controller\InstallerController::viewResponses'
+    _title: 'Installer Responses'
+  requirements:
+    _permission: 'osdag view responses'

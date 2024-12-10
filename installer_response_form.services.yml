@@ -1,0 +1,3 @@
+services:
+  installer_response_form_global:
+    class: '\Drupal\installer_response_form\Services\InstallerResponseGlobalFunction'

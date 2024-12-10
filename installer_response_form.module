@@ -4,298 +4,54 @@ ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);*/
 ini_set('memory_limit', '-1');
 global $base_url; // Will point to http://www.example.com
-/**
- * Implements hook_menu().
 
- */
+function view_responses_all() {
+  // Initialize output
+//$output = '';
+  // Query the database for all responses
+  $query = \Drupal::database()->select('installer_response', 'ir');
+  $query->fields('ir');
+  $results = $query->execute();
 
-function installer_response_form_menu()
-{
-
-	$items = array();
-  $items['upload-installer'] = array(
-    'title' => t('Upload your Installer'),
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array(
-      'upload_osdag_installer_form'
-    ),
-    'access arguments' => array(
-      'upload osdag installer'
-    ),
-    'type' => MENU_NORMAL_ITEM,
-    'file' => 'upload_installer.inc'
-  );
-  $items['download-instructions'] = array(
-    'title' => 'Download Instruction',
-    'description' => 'Download Instructions',
-    'page callback' => 'download_osdag_instructions_file',
-    'access arguments' => array(
-      'access installer response form'
-    ),
-    'type' => MENU_CALLBACK,
-    'file' => 'download.inc'
-  );
-	$items['download-installer'] = array(
-		'title' => t('Osdag User Information Form'),
-		'page callback' => 'drupal_get_form',
-		'page arguments' => array(
-      'data_submission_form'
-    ),
-		'access arguments' => array(
-			'access installer response form'
-		),
-	);
-  $items['skip/download-installer'] = array(
-    'title' => 'Osdag User Information Form',
-    'description' => 'Download Installer',
-    'page callback' => 'skip_download_osdag_installer',
-    'access arguments' => array(
-      'access installer response form'
-    ),
-    'type' => MENU_CALLBACK,
-    'file' => 'download.inc'
-  );
-  $items['admin/settings/installers'] = array(
-    'title' => 'Installer Settings',
-    'description' => 'Installer Settings',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array(
-      'installer_response_settings_form'
-    ),
-    'access arguments' => array(
-      'administer installer settings'
-    ),
-    'type' => MENU_NORMAL_ITEM,
-    'file' => 'settings.inc'
-  );
-
-  $items['view-responses'] = array(
-    'title' => 'Installer Responses',
-    'page callback' => 'view_responses_all',
-    'access arguments' => array(
-      'osdag view responses'
-    ),
-    'file' => 'view_responses.inc'
-  );
-
-	return $items;
-}
-
-function installer_response_form_permission(){
-	return array(
-             'access installer response form' => array(
-             'title' => t('access installer response form'),
-             'restrict access' => TRUE,
-             ),
-             'upload osdag installer' => array(
-             'title' => t('Upload osdag installer'),
-             'restrict access' => TRUE,
-             ),
-             'administer installer settings' => array(
-             'title' => t('administer installer settings'),
-             'restrict access' => TRUE,
-             ),
-             'osdag view responses' => array(
-              'title' => t('OSDAG view responses'),
-              'restrict access' => TRUE,
-            )
-    );
-}
-
-function data_submission_form($form, &$form_state) {
-	$url_id = arg(2);
-  $release_date = arg(1);
-  //var_dump($url_id . ' ' . $release_date);die;
-  //var_dump($installer_data);die;
-  //var_dump($download_installer);die;
-  $form['life_story'] = array(
-  '#type' => 'item',
-  '#attributes' => array('readonly' => 'readonly'),
-  '#markup' => t('
-<center><p style="font-size:14px;">Osdag®️ license and its resources are completely free of cost!</p>
-
-<p style="font-size:14px;">Osdag®️ and the Osdag logo are the registered trademarks of the Indian Institute of Technology, Bombay</p></center><br>
-
-<p style="font-size:14px;">Please fill the `Osdag User Information Form’ given below. Your data is completely safe with IIT Bombay and shall be used only for internal quality assessment by the team, sending timely e-mail notification(s) regarding Osdag events/workshops, installer updates/patches,  etc.
-</p><p style="font-size:14px;">
-We will not spam you with frequent emails!</p>'),
-  
-);
-  $form['name_title'] = array(
-		'#type' => 'select',
-		'#title' => t('Title'),
-		'#options' => array(
-			'Dr' => 'Dr',
-			'Prof' => 'Prof',
-			'Mr' => 'Mr',
-			'Ms' => 'Ms'
-		),
-		'#required' => TRUE
-	);
- $form['first_name'] = array(
-    '#type' => 'textfield',
-    '#title' => t('First Name'),
-    '#required' => TRUE,
-    '#description' => "Please enter your first name.",
-    '#size' => 255,
-    '#maxlength' => 255,
-  );
-$form['last_name'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Last Name'),
-    '#required' => TRUE,
-    '#description' => "Please enter your Last name.",
-    '#size' => 255,
-    '#maxlength' => 255,
-  );
-
-$form['institute'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Institution/Organisation/Company/School (Full name)'),
-    '#required' => TRUE,
-    '#description' => "Please enter your Institution/Organisation/Company/School (Full name).",
-    '#size' => 100,
-    '#maxlength' => 255,
-  );
-
-$form['email_id'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Email (Official, if available)'),
-    '#size' => 255,
-    '#maxlength' => 255,
-    '#description' => "Please enter your Email ID",
-    '#required' => TRUE,
-    
-  );
-
-$form['designation'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Designation'),
-    '#required' => TRUE,
-    '#description' => "Please enter your Designation.",
-    '#size' => 255,
-    '#maxlength' => 255,
-  );
-$form['installer_id'] = array(
-	'#type' => 'hidden',
-	//'#title' => t('Installer URL'),
-	'#value' => $url_id
-	);
-
-$form['release_date'] = array(
-  '#type' => 'hidden',
-  //'#title' => t('Installer URL'),
-  '#value' => $release_date
-  );
-   $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Submit'),
-    //'#submit' => array('data_submission_form_submit'),
-  );
-
-   $form['skip'] = array(
-    '#type' => 'item',
-    '#markup' => l(t('Skip'), 'skip/download-installer/' . $release_date . '/'. $url_id)
-   /* '#type' => 'submit',
-    '#value' => t('Skip'),
-    '#limit_validation_errors' => array(),
-    '#submit' => array('data_submission_form_skip_submit'),*/
-  );  
- $form['download_note'] = array(
-    '#type' => 'item',
-    '#markup' => t('<span style="color:red">Note:</span> The installer will start downloading after clicking Submit/Skip. Click <a href="https://osdag.fossee.in/resources/downloads">here</a> to go back to the Downloads page.')
-  );
-
-  $form['forum_text'] = array(
-  '#type' => 'item',
-  //'#attributes' => array('readonly' => 'readonly'),
-  '#markup' => t('
-<center><h6>Did you know?</h6></center>
-<p style="font-size:14px;">You can ask queries related to Osdag and take part in discussions by connecting with the Osdag team and other users through the FOSSEE Forums. Click <a href="https://forums.fossee.in/accounts/register/" target="_blank">here</a> to get started.</p>'),
-  
-);
-
- return $form;
-}
-
-function data_submission_form_submit($form, &$form_state, $no_js_use = FALSE){
-
-   $v = $form_state["values"];
-   $name_title = $v['name_title'];
-   $first_name = trim($v['first_name']);
-   $last_name = trim($v['last_name']);
-   $institute = trim($v['institute']);
-   $email_id = trim($v['email_id']);
-   $designation = trim($v['designation']);
-   $url_id = $v['installer_id'];
-   $release_date = $v['release_date'];
-    $query = db_select('installer_files');
-  $query->fields('installer_files');
-  $query->condition('release_date', $release_date);
-  $query->condition('id', $url_id);
-  $query->range(0, 1);
-  $installer_q = $query->execute();
-  $installer_data = $installer_q->fetchObject();
-   //var_dump($installer_data);die;
-   $result = "INSERT INTO {installer_response}
-    (
-    name_title,
-     first_name,
-     last_name,
-     institute,
-     email_id,
-     designation
-    ) VALUES
-    (
-    :name_title,
-      :first_name,
-      :last_name,
-      :institute,
-      :email_id,
-      :designation
-    )";
-
-      $args = array(
-      		":name_title" => $name_title,
-              ":first_name" => $first_name,
-              ":last_name" => $last_name,
-              ":institute" => $institute,
-              ":email_id" => $email_id,
-              ":designation" => $designation,
-      );
-
-    $query = db_query($result, $args);
-    $root_path = installer_directory_path();
-    $filepath = $installer_data->installer_path;
-      header('Content-Type: application/zip');
-      header('Content-disposition: attachment; filename="' . $filepath . '"');
-      header('Content-Length: ' . filesize($root_path . $filepath));
-      header("Content-Transfer-Encoding: Binary");
-      header('Expires: 0');
-      header('Pragma: no-cache');
-      //ob_end_flush();
-      ob_clean();
-      flush();
-      //readfile($filename);
-      if(@readfile($root_path . $filepath)){
-        exit;
-        drupal_goto('');
-        drupal_set_message(t('The form has been submitted.'),'status');
-        
-      }
-      else{
-        drupal_set_message(t('Could not download file'), 'error');
-      }
-      $form_state['redirect'] = 'https://osdag.fossee.in';
-      //exit;
-      //drupal_goto('');
-      //drupal_set_message(t('The form has been submitted.'),'status'); 
-    //  header('Location:installers');
-    //  drupal_set_message(t("The form has been submitted.")); 
- 
+  // Prepare rows for the table
+  $preference_rows = [];
+  while ($row = $results->fetchObject())
+  {
+    $preference_rows[$row->id] = [
+        $row->id,
+        $row->name_title . '. ' . $row->first_name . ' ' . $row->last_name,
+        $row->institute,
+        $row->email_id,
+        $row->designation
+      ];
   }
 
-function installer_directory_path()
-{
-  return $_SERVER['DOCUMENT_ROOT'] . base_path() . 'data/osdag/installers/';
+  // Define table headers
+  $preference_header = [
+    'S.No',
+    'Name',
+    'Institute',
+    'Email ID',
+    'Designation'
+  ];
+
+  // Build the table render array
+  $output = [
+    '#type' => 'table',
+    '#header' => $preference_header,
+    '#rows' => $preference_rows
+  ];
+  return $output;
+}
+function installer_directory_path() {
+  // Get the base path for the installation directory.
+  $base_path = \Drupal::service('file_system')->realpath('public://osdag/installers/');
+
+  // Ensure the directory exists
+  if (is_dir($base_path)) {
+    return $base_path;
+  }
+
+  // If directory doesn't exist, return an empty string or handle error appropriately
+  return '';
 }
